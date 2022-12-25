@@ -3,37 +3,30 @@
 
 [See Demo](https://github.com/benahmetcelik/laravel-crud)
 
-### Installation ###
+### Description ###
+
+This package was created to help you build a CRUD system
 
 ### Run Command On Your Terminal ###
 
 ```php
    composer require benahmetcelik/laravel-crud
 ```
-### Run Command On Your Terminal ###
+
+
+### Examples ###
+Let's first consider creating a Controller
 
 ```php
-   php artisan vendor:publish 
-```
-After press 0 and enter
-  ```php
-   php artisan optimize
+php artisan make:controller BlogController
 ```
 
-### Easy to use ###
-Only Install and usage :)
-
-### Change Colors ###
-Config/routes.php
+Now we need to create a model
 
 ```php
-  'theme'=>[
-  'theme1'=>[
-  'back'=>'#00000',
-  'text'=>'#fffff'
-]
-]
+php artisan make:model Blog
 ```
+
 
 ### Change Theme ###
 Config/route-lister.php

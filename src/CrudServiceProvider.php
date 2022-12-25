@@ -25,7 +25,10 @@ class CrudServiceProvider extends ServiceProvider
     public function boot()
     {
 
-
+   $this->loadViewsFrom(__DIR__ . '/../resources/views', 'crud');
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/crud'),
+        ]);
     }
 
     /**
