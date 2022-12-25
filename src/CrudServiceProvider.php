@@ -28,7 +28,7 @@ class CrudServiceProvider extends ServiceProvider
    $this->loadViewsFrom(__DIR__ . '/../resources/views', 'crud');
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/crud'),
-        ]);
+        ],'crud-views');
     }
 
     /**
