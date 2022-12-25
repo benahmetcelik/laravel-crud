@@ -1,7 +1,6 @@
-# Laravel Route Lister #
+# Laravel Crud #
 
 
-[See Demo](https://github.com/benahmetcelik/laravel-crud)
 
 ### Description ###
 
