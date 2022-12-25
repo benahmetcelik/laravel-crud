@@ -1,0 +1,42 @@
+{
+  "name": "benahmetcelik/laravel-crud",
+  "type": "library",
+  "description": "Laravel Crud Package",
+  "keywords": [
+    "Laravel",
+    "Crud",
+    "Crud Package",
+    "Laravel  Crud Package"
+  ],
+  "homepage": "https://github.com/benahmetcelik/laravel-crud",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Ahmet CELIK",
+      "email": "ben4hmetcelik@gmail.com",
+      "homepage": "https://github.com/benahmetcelik",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=7.0.0",
+    "laravel/framework": ">=5.5",
+  },
+  "require-dev": {
+  },
+
+  "autoload": {
+    "psr-4": {
+      "Crud\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Crud\\CrudServiceProvider"
+      ],
+      "aliases": {
+      }
+    }
+  }
+}
