@@ -86,12 +86,16 @@ class FormGenerate
                         <option value="">' . $value['placeholder'] . '</option>';
 
         foreach ($value['options'] as $optionKey => $optionValue) {
-            $input .= '<option value="' . $optionKey . '" '. (old( $key ,isset($model) ? $model->$key : null) == $optionKey  ? 'selected' : null) .' >' . $optionValue . '</option>';
+        $input .= '<option value="' . $optionKey . '" '. (old( $key ,isset($model) ? $model->$key : null) == $optionKey  ? 'selected' : null) .' >' . $optionValue . '</option>';
         }
         if (array_key_exists('relation',$value)){
             $relation = $value['relation']['model']::get();
+
            foreach ($relation as $relationKey => $relationValue) {
-                $input .= '<option value="' . $relationValue[$value['relation']['key']] . '" '. old( $key ,isset($model) ? $model->$key : null) == $relationValue[$value['relation']['key']]  ? 'selected' : null .' >' . $relationValue[$value['relation']['value']] . '</option>';
+
+               $input .= '<option value="' . $relationValue->id . '" '. (old( $key ,isset($model) ? $model->$key : null) == $relationValue->id  ? 'selected' : null) .' >' . $relationValue->{$value['relation']['value']} . '</option>';
+
+
           }
 
         }
