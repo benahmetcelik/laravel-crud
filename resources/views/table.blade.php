@@ -23,7 +23,11 @@
                         @foreach($model_details['tableColumns'] as $key => $column)
                             <td class="{{ $column['class'] }}">
                                 @if($column['type'] == 'image')
+                                    @if(json_decode($data->{$key}))
+                                        <img src="{{ asset(json_decode($data->{$key})[0]) }}" class="img-thumbnail" width="100">
+                                    @else
                                     <img src="{{ asset($data->{$key}) }}" alt="{{ $data->{$key} }}" class="img-thumbnail" width="100">
+                                    @endif
                                 @elseif($column['type'] == 'date')
                                     {{ $data->{$key}->format('d-m-Y') }}
                                 @elseif($column['type'] == 'datetime')
