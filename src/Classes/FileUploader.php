@@ -8,19 +8,36 @@ class FileUploader
 
     public static function upload($file, $path, $name = null)
     {
-        $name = $name ?? time() . $file->getClientOriginalName();
+
+       $name = time() . '-' . md5(rand(1, 1000)) . '.webp';
         $file->move($path, $name);
-        return $path.$name;
+        return $path . $name;
     }
 
     public static function uploadMultiple($files, $path, $name = null)
     {
+
         $names = [];
-        foreach ($files as $file) {
-            $names[] = self::upload($file, $path, $name);
+
+        if (strlen($files->getClientOriginalName())<1) {
+            foreach ($files as $file) {
+                if ($name == null) {
+                    $name = time() . '-' . md5(rand(1, 1000)) . $file->getClientOriginalName();
+                }
+                $names[] = self::upload($file, $path, $name);
+            }
+        } else {
+            if ($name == null) {
+                $name = time() . '-' . md5(rand(1, 1000)) . $files->getClientOriginalName();
+            }
+            $names[] = self::upload($files, $path, $name);
         }
+
+
+
         return $names;
     }
+
     public function uploadBase64($base64, $path, $name = null)
     {
         $name = $name ?? time() . '.png';
@@ -29,6 +46,7 @@ class FileUploader
         fclose($file);
         return $name;
     }
+
     public function uploadMultipleBase64($base64s, $path, $name = null)
     {
         $names = [];
@@ -37,6 +55,7 @@ class FileUploader
         }
         return $names;
     }
+
     public function uploadBase64WithPrefix($base64, $path, $prefix, $name = null)
     {
         $name = $name ?? time() . '.png';
@@ -45,6 +64,7 @@ class FileUploader
         fclose($file);
         return $prefix . $name;
     }
+
     public function uploadMultipleBase64WithPrefix($base64s, $path, $prefix, $name = null)
     {
         $names = [];
@@ -53,6 +73,7 @@ class FileUploader
         }
         return $names;
     }
+
     public function uploadBase64WithSuffix($base64, $path, $suffix, $name = null)
     {
         $name = $name ?? time() . '.png';
@@ -61,6 +82,7 @@ class FileUploader
         fclose($file);
         return $name . $suffix;
     }
+
     public function uploadMultipleBase64WithSuffix($base64s, $path, $suffix, $name = null)
     {
         $names = [];

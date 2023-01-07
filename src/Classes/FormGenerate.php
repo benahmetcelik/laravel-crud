@@ -7,9 +7,10 @@ class FormGenerate
 
     public static function generate($formInputs, $model)
     {
+
         $form = '';
-        foreach ($formInputs as $key => $value) {
-            $form .= self::generateInput($key, $value, $model);
+        foreach ($formInputs as  $key=>$value) {
+            $form .= self::generateInput($key = 0, $value, $model);
         }
         return $form;
     }
@@ -49,10 +50,16 @@ class FormGenerate
 
     public static function generateInput($key, $value, $model)
     {
+
+
+
         $input = '';
         switch ($value['type']) {
             case 'text':
                 $input = self::generateText($key, $value, $model);
+                break;
+            case 'color':
+                $input = self::generateColor($key, $value, $model);
                 break;
             case 'select':
                 $input = self::generateSelect($key, $value, $model);
@@ -70,11 +77,45 @@ class FormGenerate
         return $input;
     }
 
-    public static function generateText($key, $value, $model)
-    {
+    public static function generateColor($key, $value, $model){
+
+        if (!array_key_exists('required', $value)) {
+            $value['required'] = false;
+        }
+        if (!array_key_exists('placeholder', $value)) {
+            $value['placeholder'] = translate('backend','Enter '.$value['name']);
+        }
+        $value['name'] = translate('backend',$value['name']);
+        $value['label'] = $value['name'];
+        $key = $value['name'];
+
         $input = '<div class="form-group">
                     <label for="' . $key . '">' . $value['label'] . '</label>
-                    <input  required="' . $value['required'] . '" type="text" class="form-control" id="' . $key . '" name="' . $key . '" placeholder="' . $value['placeholder'] . '" value="' . old($key, isset($model) ? $model->$key : null) . '">
+                    <input  required="' . $value['required'] . '" type="color" class="form-control" id="' . $key . '" name="' . $key . '" placeholder="' . $value['placeholder'] . '" value="' . old($key, isset($model) ? $model->$key : null) . '">
+                </div>';
+        return $input;
+    }
+
+    public static function generateText($key, $value, $model)
+    {
+
+
+
+        if (!array_key_exists('required', $value)) {
+            $value['required'] = false;
+        }
+        if (!array_key_exists('placeholder', $value)) {
+            $value['placeholder'] = translate('backend','Enter '.$value['name']);
+        }
+
+      $value['label'] = translate('backend',$value['label']);
+       // $key = $value['name'];
+
+
+
+        $input = '<div class="form-group">
+                    <label for="' . $key.rand(0,99999) . '">' . $value['label'] . '</label>
+                    <input  required="' . $value['required'] . '" type="text" class="form-control" id="' . $key.rand(0,99999) . '" name="' .  $value['name'] . '" placeholder="' . $value['placeholder'] . '" value="' . old($key, isset($model) ? $model->{$value['name']} : null) . '">
                 </div>';
         return $input;
     }
@@ -82,14 +123,26 @@ class FormGenerate
     public static function generateSelect($key, $value, $model)
     {
 
+        if (!array_key_exists('required', $value)) {
+            $value['required'] = false;
+        }
+        if (!array_key_exists('placeholder', $value)) {
+            $value['placeholder'] = translate('backend','Enter '.$value['name']);
+        }
+        $value['name'] = translate('backend',$value['name']);
+        $value['label'] = $value['name'];
+        $key = $value['name'];
         $input = '<div class="form-group">
                     <label for="' . $key . '">' . $value['label'] . '</label>
                     <select class="form-control" id="' . $key . '" name="' . $key . '" required="' . $value['required'] . '">
                         <option value="">' . $value['placeholder'] . '</option>';
 
-        foreach ($value['options'] as $optionKey => $optionValue) {
-            $input .= '<option value="' . $optionKey . '" ' . (old($key, isset($model) ? $model->$key : null) == $optionKey ? 'selected' : null) . ' >' . $optionValue . '</option>';
+        if (array_key_exists('options',$value)){
+            foreach ($value['options'] as $optionKey => $optionValue) {
+                $input .= '<option value="' . $optionKey . '" ' . (old($key, isset($model) ? $model->$key : null) == $optionKey ? 'selected' : null) . ' >' . $optionValue . '</option>';
+            }
         }
+
         if (array_key_exists('relation', $value)) {
             $relation = $value['relation']['model']::get();
 
@@ -111,8 +164,23 @@ class FormGenerate
     public static function generateFile($key, $value, $model)
     {
 
+
+        if (!array_key_exists('required', $value)) {
+            $value['required'] = false;
+        }
+        if (!array_key_exists('placeholder', $value)) {
+            $value['placeholder'] = translate('backend','Enter '.$value['name']);
+        }
+        $value['name'] = translate('backend',$value['name']);
+        $value['label'] = $value['name'];
+        $key = $value['name'];
+
+
         $required = (isset($model)) ? '' :( $value['required'] == 'required' ? 'required="required"' : '');
 
+        if (!array_key_exists('multiple', $value)) {
+            $value['multiple'] = true;
+        }
 
         $input = '<div class="form-group">
                     <label for="' . $key . '">' . $value['label'] . '</label>
@@ -148,6 +216,15 @@ class FormGenerate
 
     public static function generateTextarea($key, $value, $model)
     {
+        $key = $value['name'];
+        if (!array_key_exists('required', $value)) {
+            $value['required'] = false;
+        }
+        if (!array_key_exists('placeholder', $value)) {
+            $value['placeholder'] = translate('backend','Enter '.$value['name']);
+        }
+        $value['name'] = translate('backend',$value['name']);
+        $value['label'] = $value['name'];
         $input = '<div class="form-group">
                     <label for="' . $key . '">' . $value['label'] . '</label>
                     <textarea  required="' . $value['required'] . '" class="form-control" id="' . $key . '" name="' . $key . '" placeholder="' . $value['placeholder'] . '" >' . old($key, isset($model) ? $model->$key : null) . '</textarea>

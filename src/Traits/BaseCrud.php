@@ -2,6 +2,7 @@
 namespace Crud\Traits;
 
 
+use Crud\Classes\FileUploader;
 use Illuminate\Http\Request;
 
 trait BaseCrud
@@ -24,6 +25,9 @@ trait BaseCrud
     }
 
 
+
+
+
     public function index(){
         $model = app($this->base_model)->paginate(12);
         $model_details = [
@@ -32,6 +36,7 @@ trait BaseCrud
             'base_resource' => $this->base_resource,
             'tableColumns' => $this->tableColumns,
             'tableActions' => $this->tableActions,
+
         ];
         return view($this->base_dir.'index',compact('model','model_details'));
     }
@@ -61,6 +66,14 @@ trait BaseCrud
     }
     public function destroy($id){
         $model = app($this->base_model)->find($id);
+        if ($model->image){
+           @unlink(public_path($model->image));
+        }
+        if ($model->images){
+           foreach ($model->images as $image){
+              @unlink(public_path($image));
+           }
+        }
         $model->delete();
         return redirect()->route($this->base_resource.'index');
     }
@@ -83,7 +96,13 @@ trait BaseCrud
            if ($request->has($fillable)){
                $data[$fillable] = $request->get($fillable) != null ? $request->get($fillable) : '';
            }
+           if ($request->hasFile($fillable)){
+               $file = new FileUploader();
+                $data[$fillable] = json_encode($file->uploadMultiple($request->file($fillable),$fillable.'/'));
+           }
         }
+
+
         return $data;
 
     }
