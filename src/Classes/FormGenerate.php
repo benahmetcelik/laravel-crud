@@ -10,6 +10,8 @@ class FormGenerate
 
         $form = '';
         foreach ($formInputs as  $key=>$value) {
+
+
             $form .= self::generateInput($key = 0, $value, $model);
         }
         return $form;
@@ -53,6 +55,7 @@ class FormGenerate
 
 
 
+
         $input = '';
         switch ($value['type']) {
             case 'text':
@@ -85,8 +88,8 @@ class FormGenerate
         if (!array_key_exists('placeholder', $value)) {
             $value['placeholder'] = translate('backend','Enter '.$value['name']);
         }
-        $value['name'] = translate('backend',$value['name']);
-        $value['label'] = $value['name'];
+        $value['label'] = translate('backend',$value['name']);
+
         $key = $value['name'];
 
         $input = '<div class="form-group">
@@ -101,8 +104,10 @@ class FormGenerate
 
 
 
-        if (!array_key_exists('required', $value)) {
-            $value['required'] = false;
+        if (array_key_exists('required', $value)) {
+            $value['required'] = 'required="required"';
+        }else{
+            $value['required'] = '';
         }
         if (!array_key_exists('placeholder', $value)) {
             $value['placeholder'] = translate('backend','Enter '.$value['name']);
@@ -115,7 +120,7 @@ class FormGenerate
 
         $input = '<div class="form-group">
                     <label for="' . $key.rand(0,99999) . '">' . $value['label'] . '</label>
-                    <input  required="' . $value['required'] . '" type="text" class="form-control" id="' . $key.rand(0,99999) . '" name="' .  $value['name'] . '" placeholder="' . $value['placeholder'] . '" value="' . old($key, isset($model) ? $model->{$value['name']} : null) . '">
+                    <input  ' . $value['required'] . ' type="text" class="form-control" id="' . $key.rand(0,99999) . '" name="' .  $value['name'] . '" '.($value['name'] == 'slug' ? ' ' : '').' placeholder="' . $value['placeholder'] . '" value="' . old($key, isset($model) ? $model->{$value['name']} : null) . '">
                 </div>';
         return $input;
     }
@@ -129,12 +134,12 @@ class FormGenerate
         if (!array_key_exists('placeholder', $value)) {
             $value['placeholder'] = translate('backend','Enter '.$value['name']);
         }
-        $value['name'] = translate('backend',$value['name']);
-        $value['label'] = $value['name'];
+        $value['label'] = translate('backend',$value['label']);
+
         $key = $value['name'];
         $input = '<div class="form-group">
                     <label for="' . $key . '">' . $value['label'] . '</label>
-                    <select class="form-control" id="' . $key . '" name="' . $key . '" required="' . $value['required'] . '">
+                    <select class="form-control" id="' . $key . '" name="' . $value['name'] . '" required="' . $value['required'] . '">
                         <option value="">' . $value['placeholder'] . '</option>';
 
         if (array_key_exists('options',$value)){
@@ -171,8 +176,8 @@ class FormGenerate
         if (!array_key_exists('placeholder', $value)) {
             $value['placeholder'] = translate('backend','Enter '.$value['name']);
         }
-        $value['name'] = translate('backend',$value['name']);
-        $value['label'] = $value['name'];
+        $value['label'] = translate('backend',$value['label']);
+
         $key = $value['name'];
 
 
@@ -218,16 +223,18 @@ class FormGenerate
     {
         $key = $value['name'];
         if (!array_key_exists('required', $value)) {
-            $value['required'] = false;
+            $value['required'] = '';
+        }else{
+            $value['required'] = 'required';
         }
         if (!array_key_exists('placeholder', $value)) {
             $value['placeholder'] = translate('backend','Enter '.$value['name']);
         }
-        $value['name'] = translate('backend',$value['name']);
-        $value['label'] = $value['name'];
+        $value['label'] = translate('backend',$value['label']);
+
         $input = '<div class="form-group">
                     <label for="' . $key . '">' . $value['label'] . '</label>
-                    <textarea  required="' . $value['required'] . '" class="form-control" id="' . $key . '" name="' . $key . '" placeholder="' . $value['placeholder'] . '" >' . old($key, isset($model) ? $model->$key : null) . '</textarea>
+                    <textarea ' . $value['required'] . ' class="form-control" id="' . $key . '" name="' . $key . '" placeholder="' . $value['placeholder'] . '" >' . old($key, isset($model) ? $model->$key : null) . '</textarea>
                 </div>';
         return $input;
     }

@@ -8,8 +8,21 @@ class FileUploader
 
     public static function upload($file, $path, $name = null)
     {
+        $client_original_names = [
+            'jpg' => 'jpg',
+            'png' => 'png',
+            'jpeg' => 'jpeg',
+        ];
 
-       $name = time() . '-' . md5(rand(1, 1000)) . '.webp';
+
+        if (!array_key_exists($file->getClientOriginalExtension(), $client_original_names)) {
+            $name = time() . '-' . md5(rand(1, 1000)) . '.' . $file->getClientOriginalExtension();
+        } else {
+            $name = time() . '-' . md5(rand(1, 1000)) . '.webp';
+        }
+
+
+       // $name = time() . '-' . md5(rand(1, 1000)) . '.webp';
         $file->move($path, $name);
         return $path . $name;
     }
@@ -17,22 +30,17 @@ class FileUploader
     public static function uploadMultiple($files, $path, $name = null)
     {
 
+
         $names = [];
 
-        if (strlen($files->getClientOriginalName())<1) {
+        if (is_array($files)) {
             foreach ($files as $file) {
-                if ($name == null) {
-                    $name = time() . '-' . md5(rand(1, 1000)) . $file->getClientOriginalName();
-                }
                 $names[] = self::upload($file, $path, $name);
             }
         } else {
-            if ($name == null) {
-                $name = time() . '-' . md5(rand(1, 1000)) . $files->getClientOriginalName();
-            }
+
             $names[] = self::upload($files, $path, $name);
         }
-
 
 
         return $names;
